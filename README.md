@@ -37,5 +37,18 @@ YouTube Data Harvesting and Warehousing using SQL and Streamlit
  6. If you hit the 'Save Into DB' button, the YouTube channel details, playlist details, and video details will be stored inside the MySQL table.
  7. After the data is inserted, you can select the dropdown to see the list of questions. Once you select a question, the corresponding answer will be displayed.
 
+Fig 1:
+![Alt text](Screenshots/Screen_1.PNG)
+
+Fig 2:
+![Alt text](Screenshots/Screen_2.PNG)
+
+Fig 3:
+![Alt text](Screenshots/Screen_3.PNG)
+
+Fig 4:
+![Alt text](Screenshots/Screen_4.PNG)
+
+
    
      
