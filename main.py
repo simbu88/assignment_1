@@ -26,7 +26,6 @@ if search:
    if channelItem is None:
        st.write("Channel Not Found")
    else:
-       
         st.write(channelItem)  
         save_btn_clicked = st.button("Save Into DB",type="primary",key="save_db")     
 
