@@ -20,4 +20,8 @@ YouTube Data Harvesting and Warehousing using SQL and Streamlit
 3. Create Youtube API Key
 
     Refer the link to create and access the youtube [YouTue](https://developers.google.com/youtube/v3/getting-started)
+
+4. Install the mysql workbench
+
+   Download the link from [here](https://dev.mysql.com/downloads/workbench/) and install it.
      
