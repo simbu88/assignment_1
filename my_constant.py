@@ -1,8 +1,6 @@
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
-##YOUTUBE_DEVELOPER_KEY ="AIzaSyCYvDl9WUggX1ujjVaVad77y5ZMjogib8Q" --this main
-YOUTUBE_DEVELOPER_KEY ="AIzaSyBS9Hrif6qJKGPcnx9LgomXpq7_7927G-c"
-CHANNEL_ID ="UCe3qdG0A_gr-sEdat5y2twQ"
+YOUTUBE_DEVELOPER_KEY ="Add your youtube developer API Key "
 
 HOST="localhost:3306"
 USER="root"

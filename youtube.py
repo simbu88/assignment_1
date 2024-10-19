@@ -5,22 +5,29 @@ import pandas as pd
 import database as db
 
 
-
-youtube = googleapiclient.discovery.build(
+try:
+    youtube = googleapiclient.discovery.build(
          constant.YOUTUBE_API_SERVICE_NAME,  constant.YOUTUBE_API_VERSION, developerKey = constant.YOUTUBE_DEVELOPER_KEY)
-channel_list =[]
+except:
+    print("Youtube api crdential is missing")
+
 
 
 def get_channel_details(channelId):
+        original_data = None
         needed_column = ['id','snippet.title','snippet.description','statistics.viewCount','statistics.subscriberCount','statistics.videoCount'] 
         column_rename = ["channel_id","channel_name","channel_description","channel_views","channel_subscriber_count","channel_video_count"]
         channel_request = youtube.channels().list( 
         part='snippet,statistics', 
         id=channelId) # Query execution
         response = channel_request.execute()
-        original_data = pd.json_normalize(response['items'])[needed_column]
-        original_data.columns = column_rename
-        return original_data
+        if  'items' in response:
+            original_data = pd.json_normalize(response['items'])[needed_column]
+            original_data.columns = column_rename
+            return original_data
+        else:
+            return None    
+        
        
 
 
@@ -60,13 +67,14 @@ def get_video_list(playlist_Id):
         pageToken=nextPageToken
         )
         video_list_response = video_request.execute()
-
-        for item in video_list_response['items']:
-             all_videos.append(item)
-        
-        nextPageToken = video_list_response.get('nextPageToken')
+        if  'items' in video_list_response:
+            for item in video_list_response['items']:
+                all_videos.append(item)
+            nextPageToken = video_list_response.get('nextPageToken')
         if not nextPageToken: 
-           break 
+           break        
+        else:
+           print("") 
     if len(all_videos) > 0:    
        original_data=pd.json_normalize(all_videos)[needed_column]
        original_data.columns = column_rename
@@ -106,8 +114,6 @@ def get_video_details(video_data):
     # remove_empty_comment_video = after_duplicat_removed.drop(after_duplicat_removed[after_duplicat_removed['comment_count'] ==0].index)
     # for vide_id in remove_empty_comment_video['video_id']:
     #     comments_list= pd.concat([comments_list,get_video_comment(vide_id)],ignore_index=True) 
-    
-    # st.write(comments_list)
     # db.insert_into_db("comments",comments_list)
 
 
@@ -127,7 +133,7 @@ def get_video_comment(videoId):
             textFormat= "plainText"
             )
             comment_response = request.execute()
-      
+            
             for item in comment_response['items']:
                 all_comments.append(item)
 

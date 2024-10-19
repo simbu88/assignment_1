@@ -23,8 +23,12 @@ with col2:
 if search:
    left, middle, right = st.columns(3)
    channelItem =yt.get_channel_details(text_input)
-   st.write(channelItem)
-   save_btn_clicked = st.button("Save Into DB",type="primary",key="save_db")     
+   if channelItem is None:
+       st.write("Channel Not Found")
+   else:
+       
+        st.write(channelItem)  
+        save_btn_clicked = st.button("Save Into DB",type="primary",key="save_db")     
 
 if st.session_state.get("save_db"):   
    yt.get_playlist_details(text_input)
