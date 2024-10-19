@@ -16,4 +16,8 @@ YouTube Data Harvesting and Warehousing using SQL and Streamlit
    Install the visual studio to create a python files.
    
    Refer the link to install the [Visual Studio](https://code.visualstudio.com/download)
+
+3. Create Youtube API Key
+
+    Refer the link to create and access the youtube [YouTue](https://developers.google.com/youtube/v3/getting-started)
      
