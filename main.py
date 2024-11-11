@@ -1,102 +1,29 @@
 import streamlit as st
-import youtube as yt
-import pandas as pd
-import numpy as np
 import my_constant as constant
-import result_page as rp
-
-
-dataFrame = pd.DataFrame()
-col1, col2 = st.columns(2)
-channel_list =[]
-
-
-with col1:
-  text_input = st.text_input(
-      "Enter channel Id",
-      placeholder="Enter channel Id",key='channelId',
-      label_visibility='collapsed'
-  )
-with col2:
-     search = st.button("Search", type="primary")
-
-if search:
-   left, middle, right = st.columns(3)
-   channelItem =yt.get_channel_details(text_input)
-   if channelItem is None:
-       st.write("Channel Not Found")
-   else:
-        st.write(channelItem)  
-        save_btn_clicked = st.button("Save Into DB",type="primary",key="save_db")     
-
-if st.session_state.get("save_db"):   
-   yt.get_playlist_details(text_input)
-   
-question_option = [constant.QUESTION_1,constant.QUESTION_2,constant.QUESTION_3,constant.QUESTION_4,constant.QUESTION_5,constant.QUESTION_6
-     ,constant.QUESTION_7,constant.QUESTION_8,constant.QUESTION_9,constant.QUESTION_10]
-option = st.selectbox(
-    "Select the question",
-    question_option,
-    index=None,
-    placeholder="Select the question...",
-    label_visibility='collapsed'
-)
-
-if option == constant.QUESTION_1: 
-   rp.question_one()
-elif option == constant.QUESTION_2:   
-    rp.question_two()
-elif option == constant.QUESTION_3:
-      rp.question_three()   
-elif option == constant.QUESTION_4:   
-     rp.question_four() 
-elif option == constant.QUESTION_5:   
-     rp.question_five() 
-elif option == constant.QUESTION_6:   
-    rp.question_six() 
-elif option == constant.QUESTION_7:   
-    rp.question_seven() 
-elif option == constant.QUESTION_8:   
-    rp.question_eight() 
-elif option == constant.QUESTION_9:   
-    rp.question_nine() 
-elif option == constant.QUESTION_10:   
-    rp.question_ten()                                
-
-
-# if finalValue:
-#    left, middle, right = st.columns(3)
-#    channelItem =  yt.get_channel_info(text_input)
-#    channel_list.append(channelItem)
-#    dataFrame = pd.DataFrame(channel_list)
-#    st.write(dataFrame) 
-#    save_btn_clicked = st.button("Save Into DB",type="primary",key="save_db")
+from PIL import Image
+import base64
+import altair as alt
 
 
 
+st.set_page_config(
+    page_title=constant.APPLICATION_NAME,
+    page_icon="https://img.icons8.com/color/48/youtube-play.png",
+    layout="wide",
+    initial_sidebar_state="expanded")
 
-   
-
-
-
-
-   
- 
-   
-
-   
-      
+def add_logo(logo_path):
+    return Image.open(logo_path)
 
 
+welcome_page = st.Page("./pages/Welcome.py", title="Welcome", icon=":material/waving_hand:")
+add_channel_page = st.Page("./pages/Add_Channel.py", title="Add Channel", icon=":material/add_to_queue:")
+view_query_page = st.Page("./pages/View_Query.py", title="View Queries", icon=":material/visibility:")
+about_us = st.Page("./pages/About_Us.py", title="About us", icon=":material/person:")
 
-   
+my_logo = add_logo(logo_path="./images/video.png")
+pages = st.navigation(
+      [welcome_page, add_channel_page,view_query_page,about_us]
+     )
 
-
-
-
-
-
-
-
-
-    
+pages.run()

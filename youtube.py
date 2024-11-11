@@ -15,8 +15,8 @@ except:
 
 def get_channel_details(channelId):
         original_data = None
-        needed_column = ['id','snippet.title','snippet.description','statistics.viewCount','statistics.subscriberCount','statistics.videoCount'] 
-        column_rename = ["channel_id","channel_name","channel_description","channel_views","channel_subscriber_count","channel_video_count"]
+        needed_column = ['id','snippet.title','snippet.description','statistics.viewCount','statistics.subscriberCount','statistics.videoCount','snippet.thumbnails.medium.url'] 
+        column_rename = ["channel_id","channel_name","channel_description","channel_views","channel_subscriber_count","channel_video_count",'channel_image']
         channel_request = youtube.channels().list( 
         part='snippet,statistics', 
         id=channelId) # Query execution
@@ -26,9 +26,13 @@ def get_channel_details(channelId):
             original_data.columns = column_rename
             return original_data
         else:
-            return None    
+            return None   
+
         
-       
+def getChannelIsAvaialble(channel_Id):
+    query = f"select *from channel where channel_id = '{channel_Id}'" 
+    result = db.read_data(query) 
+    return len(result)
 
 
 def get_playlist_details(channelId): 

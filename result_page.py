@@ -5,11 +5,23 @@ import database as db
 import seaborn as sns
 import re
 import my_constant as constant
+import requests
+from io import BytesIO
+from PIL import Image
+
 
 original_title = '<p style="font-family:Courier; color:Green; font-size: 20px;">Answer : </p>'
 
+def loadImage(image_url):
+    response = requests.get(image_url)
+    img = Image.open(BytesIO(response.content))
+    new_width = 300
+    new_height = 200
+    img_resized = img.resize((new_width, new_height))
+    st.image(img_resized)   
+
 def question_one():
-    st.write("Qustion : "+constant.QUESTION_1)
+    st.write("Question : "+constant.QUESTION_1)
     my_query =("SELECT ch.channel_name,v.video_id,v.video_name,v.view_count,v.like_count,v.dislike_count,"
                "v.comment_count,v.favourite_count FROM channel ch JOIN playlist pl ON ch.channel_id = pl.channel_id"
                " JOIN videos v ON v.playlist_id = pl.playlist_id ")
@@ -23,19 +35,24 @@ def question_one():
     print("question one")
 
 def question_two():
-    st.write("Qustion : "+constant.QUESTION_2)
-    query = "select channel_name, channel_description,channel_video_count from channel"
+    st.write("Question : "+constant.QUESTION_2)
+    query = "select channel_image,channel_name, channel_description,channel_video_count from channel"
     result_data = db.read_data(query)
     print(result_data.info())
     result_data =result_data.sort_values("channel_video_count",ascending=False)
     top_one = result_data.head(1)
     st.markdown(original_title, unsafe_allow_html=True)
-    st.write("See the top channels with the most videos below.")
-    st.write(top_one)
+    ch_col1,ch_col2 = st.columns([0.1,0.9])
+    with ch_col1:
+         loadImage(top_one['channel_image'].iloc[0])
+    with ch_col2:
+         st.write(f"<h3 style='color:#f29652'>{top_one['channel_name'].iloc[0]}</h3>",unsafe_allow_html=True)
+         st.write(top_one['channel_description'].iloc[0])
+         st.write(f"<b style='color:#f29652'>Videos:</b> {top_one['channel_video_count'].iloc[0]}",unsafe_allow_html=True)
     
 
 def question_three():
-    st.write("Qustion : "+constant.QUESTION_3)
+    st.write("Question : "+constant.QUESTION_3)
     query = ("SELECT DISTINCT ch.channel_name,v.video_name,v.view_count FROM channel ch JOIN playlist pl" 
              " ON ch.channel_id = pl.channel_id "
              "JOIN videos v ON v.playlist_id = pl.playlist_id order by v.view_count")
@@ -44,13 +61,19 @@ def question_three():
     print(result_data.info())
     st.markdown(original_title, unsafe_allow_html=True)
     st.write(first_resul.head(10).reset_index(drop=True) )
-    st.write("Answer 2: ")
-    top_video_each_channel = result_data.groupby('channel_name',group_keys=False).apply(lambda x: x.nlargest(10, 'view_count')).reset_index(drop=True) 
-    st.write(top_video_each_channel)
-    print("")   
+    for videoItem in len(first_resul.head(10)):
+         ch_col1,ch_col2 = st.columns([0.1,0.9])
+         with ch_col1:
+              loadImage(first_resul[videoItem].iloc[0].iloc[0])
+         with ch_col2:
+            st.write(f"<h3 style='color:#f29652'>{top_one['channel_name'].iloc[0]}</h3>",unsafe_allow_html=True)
+            st.write(top_one['channel_description'].iloc[0])
+            st.write(f"<b style='color:#f29652'>Videos:</b> {top_one['channel_video_count'].iloc[0]}",unsafe_allow_html=True)
+    
+   
 
 def question_four():
-    st.write("Qustion : "+constant.QUESTION_4)
+    st.write("Question : "+constant.QUESTION_4)
     query =("SELECT DISTINCT v.video_name,v.comment_count FROM channel ch" 
              " JOIN playlist pl ON ch.channel_id = pl.channel_id"
              "  JOIN videos v ON v.playlist_id = pl.playlist_id")
@@ -62,7 +85,7 @@ def question_four():
     print("")   
 
 def question_five():
-    st.write("Qustion : "+constant.QUESTION_5)
+    st.write("Question : "+constant.QUESTION_5)
     query = ("SELECT DISTINCT ch.channel_name,v.video_name,v.like_count FROM channel ch" 
              " JOIN playlist pl ON ch.channel_id = pl.channel_id"
              " JOIN videos v ON v.playlist_id = pl.playlist_id order by v.like_count desc LIMIT 10") 
@@ -72,7 +95,7 @@ def question_five():
     print("")    
 
 def question_six():
-    st.write("Qustion : "+constant.QUESTION_6)
+    st.write("Question : "+constant.QUESTION_6)
     query = ("SELECT DISTINCT ch.channel_name,v.video_name,v.like_count,v.dislike_count FROM channel ch" 
              " JOIN playlist pl ON ch.channel_id = pl.channel_id"
              " JOIN videos v ON v.playlist_id = pl.playlist_id ") 
@@ -84,7 +107,7 @@ def question_six():
     print("")    
 
 def question_seven():
-    st.write("Qustion : "+constant.QUESTION_7)
+    st.write("Question : "+constant.QUESTION_7)
     query = ("SELECT DISTINCT channel_name, channel_views from channel") 
     result_data = db.read_data(query)
     print(result_data.info())
@@ -101,7 +124,7 @@ def question_seven():
     st.pyplot(plt.gcf())      
 
 def question_eight():
-    st.write("Qustion : "+constant.QUESTION_8)
+    st.write("Question : "+constant.QUESTION_8)
     query = ("SELECT ch.channel_id,ch.channel_name,v.video_name,v.published_date FROM channel ch" 
              " JOIN playlist pl ON ch.channel_id = pl.channel_id"
              " JOIN videos v ON v.playlist_id = pl.playlist_id where" 
@@ -113,7 +136,7 @@ def question_eight():
     st.write(result_data)  
 
 def question_nine():
-    st.write("Qustion : "+constant.QUESTION_9)
+    st.write("Question : "+constant.QUESTION_9)
     query = ("SELECT ch.channel_id,ch.channel_name,v.video_name,v.duration FROM channel ch" 
              " JOIN playlist pl ON ch.channel_id = pl.channel_id"
              " JOIN videos v ON v.playlist_id = pl.playlist_id")
@@ -127,7 +150,7 @@ def question_nine():
 
 
 def question_ten():
-    st.write("Qustion : "+constant.QUESTION_10)
+    st.write("Question : "+constant.QUESTION_10)
     query =("SELECT ch.channel_name,v.video_name,v.comment_count FROM channel ch" 
             " JOIN playlist pl ON ch.channel_id = pl.channel_id"
             " JOIN videos v ON v.playlist_id = pl.playlist_id order by v.comment_count desc LIMIT 1") 
