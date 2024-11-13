@@ -72,7 +72,7 @@ if st.session_state.get("save_db"):
    with st.spinner("Retriving and storing... Please wait."):
         yt.get_playlist_details(text_input)
 
-   show_dialog("Channel store inside the data base")       
+   show_dialog("The channel has been successfully stored in the database.")       
 
 def getChannelInfo():
     with st.spinner("Processing... Please wait."):
